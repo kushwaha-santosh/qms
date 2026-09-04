@@ -1,0 +1,5 @@
+import { NextResponse } from "next/server";
+import { requireAuth, requirePermission } from "@/lib/auth/requireAuth.js";
+import { listSuppliers, createSupplier } from "@/services/suppliers/supplier.service.js";
+export async function GET(request) { try { const a=await requireAuth(request); if(!a.success)return a.response; const {user}=a; const result=await listSuppliers({user,filters:Object.fromEntries(request.nextUrl.searchParams.entries())}); return NextResponse.json({success:true,...result}); } catch(e) { return NextResponse.json({success:false,message:e?.message||"Unable to load suppliers."},{status:e?.statusCode||e?.status||500}); } }
+export async function POST(request) { try { const a=await requirePermission(request,"SUPPLIER_CREATE"); if(!a.success)return a.response; const {user}=a; const body=await request.json(); const record=await createSupplier({user,data:body}); return NextResponse.json({success:true,record},{status:201}); } catch(e) { return NextResponse.json({success:false,message:e?.message||"Unable to create supplier."},{status:e?.statusCode||e?.status||500}); } }

@@ -1,26 +1,2153 @@
 @import "tailwindcss";
 
+/* ==========================================================
+QMS AI - GLOBAL UI SCALE
+========================================================== */
+
+/*
+Design target:
+
+* Browser zoom: 100%
+* Visual density: approximately 90% browser zoom
+* Compact enterprise/QMS dashboard appearance
+* No CSS zoom/transform
+* Responsive layout preserved
+*/
+
+/* ==========================================================
+ROOT VARIABLES
+========================================================== */
+
 :root {
+  /* --------------------------------------------------------
+  Application colors
+  -------------------------------------------------------- */
+
   --background: #ffffff;
   --foreground: #171717;
+
+  /* --------------------------------------------------------
+  QMS UI SCALE
+  -------------------------------------------------------- */
+
+  --qms-font-base: 14px;
+
+  --qms-font-xs: 11px;
+  --qms-font-sm: 12px;
+  --qms-font-md: 14px;
+  --qms-font-lg: 16px;
+  --qms-font-xl: 18px;
+  --qms-font-2xl: 22px;
+  --qms-font-3xl: 28px;
+
+  /* --------------------------------------------------------
+  Line heights
+  -------------------------------------------------------- */
+
+  --qms-line-tight: 1.2;
+  --qms-line-normal: 1.4;
+  --qms-line-relaxed: 1.5;
+
+  /* --------------------------------------------------------
+  Controls
+  -------------------------------------------------------- */
+
+  --qms-control-height-xs: 30px;
+  --qms-control-height-sm: 34px;
+  --qms-control-height-md: 36px;
+  --qms-control-height-lg: 40px;
+
+  --qms-control-padding-x: 12px;
+  --qms-control-padding-y: 7px;
+
+  /* --------------------------------------------------------
+  Spacing
+  -------------------------------------------------------- */
+
+  --qms-space-1: 4px;
+  --qms-space-2: 6px;
+  --qms-space-3: 8px;
+  --qms-space-4: 10px;
+  --qms-space-5: 12px;
+  --qms-space-6: 16px;
+  --qms-space-7: 20px;
+  --qms-space-8: 24px;
+
+  /* --------------------------------------------------------
+  Borders / radius
+  -------------------------------------------------------- */
+
+  --qms-radius-sm: 4px;
+  --qms-radius-md: 6px;
+  --qms-radius-lg: 8px;
+
+  --qms-border-color: #e2e8f0;
+
+  /* --------------------------------------------------------
+  Shadows
+  -------------------------------------------------------- */
+
+  --qms-shadow-sm:
+    0 1px 2px rgb(15 23 42 / 0.035),
+    0 2px 6px rgb(15 23 42 / 0.025);
+
+  --qms-shadow-md:
+    0 4px 12px rgb(15 23 42 / 0.055),
+    0 1px 3px rgb(15 23 42 / 0.035);
+
+  --qms-shadow-lg:
+    0 12px 32px rgb(15 23 42 / 0.08),
+    0 3px 8px rgb(15 23 42 / 0.035);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ==========================================================
+QMS THEME SYSTEM
+========================================================== */
+
+:root {
+  /* Page */
+
+  --qms-page-bg: #ffffff;
+
+  /* Surfaces */
+
+  --qms-surface: #ffffff;
+  --qms-surface-muted: #f8fafc;
+  --qms-surface-soft: #f1f5f9;
+  --qms-surface-hover: #f8fbff;
+
+  /* Text */
+
+  --qms-text: #0f172a;
+  --qms-text-secondary: #475569;
+  --qms-text-muted: #94a3b8;
+
+  /* Borders */
+
+  --qms-border: #e2e8f0;
+  --qms-border-soft: #edf2f7;
+
+  /* Primary */
+
+  --qms-primary: #2563eb;
+  --qms-primary-dark: #1d4ed8;
+  --qms-primary-soft: #eff6ff;
+
+  /* Interactive */
+
+  --qms-focus-ring: rgb(37 99 235 / 0.12);
+
+  /* Light-mode decorative background */
+
+  --qms-page-gradient: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html.dark {
+  --background: #0b1120;
+  --foreground: #e5e7eb;
+
+  --qms-page-bg: #0b1120;
+
+  --qms-surface: #111827;
+  --qms-surface-muted: #0f172a;
+  --qms-surface-soft: #1e293b;
+  --qms-surface-hover: #172033;
+
+  --qms-text: #f8fafc;
+  --qms-text-secondary: #cbd5e1;
+  --qms-text-muted: #94a3b8;
+
+  --qms-border: #334155;
+  --qms-border-soft: #1e293b;
+
+  --qms-primary: #3b82f6;
+  --qms-primary-dark: #60a5fa;
+  --qms-primary-soft: #172554;
+
+  --qms-focus-ring: rgb(59 130 246 / 0.18);
+
+  --qms-page-gradient:
+    radial-gradient(
+      circle at 0% 0%,
+      rgb(37 99 235 / 0.08),
+      transparent 30%
+    );
+}
+
+/* ==========================================================
+GLOBAL BOX SIZING
+========================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ==========================================================
+HTML / BODY
+========================================================== */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+html {
+  font-size: 14px;
+
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+
+  background: #ffffff;
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
+  background: #ffffff;
+
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: var(--qms-font-base);
+
+  line-height: var(--qms-line-normal);
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+html.dark body {
+  background: var(--qms-page-bg);
+  color: var(--qms-text);
+}
+
+/* ==========================================================
+EXISTING QMS UTILITY DARK-MODE TREATMENT
+========================================================== */
+
+html.dark .bg-white {
+  background-color: var(--qms-surface) !important;
+}
+
+html.dark .bg-gray-50 {
+  background-color: var(--qms-surface-muted) !important;
+}
+
+html.dark .bg-gray-100 {
+  background-color: var(--qms-surface-soft) !important;
+}
+
+html.dark .bg-slate-50 {
+  background-color: var(--qms-surface-muted) !important;
+}
+
+html.dark .bg-slate-100 {
+  background-color: var(--qms-surface-soft) !important;
+}
+
+html.dark .text-gray-900,
+html.dark .text-gray-800,
+html.dark .text-slate-900,
+html.dark .text-slate-800 {
+  color: var(--qms-text) !important;
+}
+
+html.dark .text-gray-700,
+html.dark .text-gray-600,
+html.dark .text-slate-700,
+html.dark .text-slate-600 {
+  color: var(--qms-text-secondary) !important;
+}
+
+html.dark .text-gray-500,
+html.dark .text-gray-400,
+html.dark .text-slate-500,
+html.dark .text-slate-400 {
+  color: var(--qms-text-muted) !important;
+}
+
+html.dark .border-gray-100,
+html.dark .border-gray-200,
+html.dark .border-gray-300,
+html.dark .border-slate-100,
+html.dark .border-slate-200,
+html.dark .border-slate-300 {
+  border-color: var(--qms-border) !important;
+}
+
+html.dark .divide-gray-100 > :not(:last-child),
+html.dark .divide-gray-200 > :not(:last-child) {
+  border-color: var(--qms-border) !important;
+}
+
+html.dark input,
+html.dark select,
+html.dark textarea {
+  background-color: #0f172a;
+  color: #f8fafc;
+  border-color: #334155;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #64748b;
+}
+
+html.dark option {
+  background-color: #111827;
+  color: #f8fafc;
+}
+
+html.dark .shadow-sm,
+html.dark .shadow,
+html.dark .shadow-md,
+html.dark .shadow-lg {
+  --tw-shadow-color: rgb(0 0 0 / 0.35);
+}
+
+html.dark .hover\:bg-gray-50:hover {
+  background-color: #1e293b !important;
+}
+
+html.dark .hover\:bg-gray-100:hover {
+  background-color: #1e293b !important;
+}
+
+html.dark .hover\:bg-gray-200:hover {
+  background-color: #334155 !important;
+}
+
+/* ==========================================================
+DARK MODE STATUS COLORS
+========================================================== */
+
+html.dark .bg-red-50 {
+  background-color: rgb(127 29 29 / 0.28) !important;
+}
+
+html.dark .bg-green-50 {
+  background-color: rgb(20 83 45 / 0.28) !important;
+}
+
+html.dark .bg-amber-50 {
+  background-color: rgb(120 53 15 / 0.28) !important;
+}
+
+html.dark .bg-blue-50 {
+  background-color: rgb(30 64 175 / 0.28) !important;
+}
+
+html.dark .bg-violet-50 {
+  background-color: rgb(76 29 149 / 0.28) !important;
+}
+
+html.dark .bg-cyan-50 {
+  background-color: rgb(22 78 99 / 0.28) !important;
+}
+
+/* ==========================================================
+GLOBAL TYPOGRAPHY
+========================================================== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  margin-bottom: 0;
+
+  font-weight: 600;
+  line-height: var(--qms-line-tight);
+}
+
+h1 {
+  font-size: var(--qms-font-2xl);
+  letter-spacing: -0.025em;
+}
+
+h2 {
+  font-size: var(--qms-font-xl);
+  letter-spacing: -0.015em;
+}
+
+h3 {
+  font-size: var(--qms-font-lg);
+}
+
+h4 {
+  font-size: var(--qms-font-md);
+}
+
+h5 {
+  font-size: var(--qms-font-sm);
+}
+
+h6 {
+  font-size: var(--qms-font-xs);
+}
+
+p {
+  line-height: var(--qms-line-normal);
+}
+
+/* ==========================================================
+FORM ELEMENTS
+========================================================== */
+
+input,
+select,
+textarea,
+button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* ==========================================================
+INPUTS
+========================================================== */
+
+input:not([type="checkbox"]):not([type="radio"]),
+select {
+  min-height: var(--qms-control-height-md);
+
+  font-size: var(--qms-font-sm);
+
+  line-height: 1.3;
+}
+
+textarea {
+  font-size: var(--qms-font-sm);
+  line-height: var(--qms-line-normal);
+}
+
+input,
+select,
+textarea {
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+/* ==========================================================
+LIGHT MODE FORM CONTROLS
+========================================================== */
+
+html:not(.dark) input:not([type="checkbox"]):not([type="radio"]),
+html:not(.dark) select,
+html:not(.dark) textarea {
+  border-color: #dbe3ee;
+  background-color: #ffffff;
+
+  box-shadow:
+    inset 0 1px 2px rgb(15 23 42 / 0.02);
+}
+
+html:not(.dark) input:not([type="checkbox"]):not([type="radio"]):hover,
+html:not(.dark) select:hover,
+html:not(.dark) textarea:hover {
+  border-color: #cbd5e1;
+  background-color: #ffffff;
+}
+
+html:not(.dark) input:not([type="checkbox"]):not([type="radio"]):focus,
+html:not(.dark) select:focus,
+html:not(.dark) textarea:focus {
+  border-color: var(--qms-primary) !important;
+
+  box-shadow:
+    0 0 0 3px var(--qms-focus-ring),
+    0 1px 2px rgb(15 23 42 / 0.03);
+
+  outline: none;
+}
+
+/* ==========================================================
+BUTTONS
+========================================================== */
+
+button {
+  font-size: var(--qms-font-sm);
+  line-height: 1.25;
+
+  border-radius: var(--qms-radius-md);
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--qms-primary);
+  outline-offset: 2px;
+}
+
+/* ==========================================================
+LIGHT MODE BUTTON ENHANCEMENT
+========================================================== */
+
+html:not(.dark) button:not(:disabled):hover {
+  box-shadow:
+    0 2px 7px rgb(15 23 42 / 0.06);
+}
+
+/* ==========================================================
+TABLES
+========================================================== */
+
+table {
+  width: 100%;
+  font-size: var(--qms-font-sm);
+}
+
+thead {
+  font-size: var(--qms-font-xs);
+}
+
+th {
+  font-size: var(--qms-font-xs);
+  line-height: var(--qms-line-tight);
+  font-weight: 600;
+}
+
+td {
+  font-size: var(--qms-font-sm);
+  line-height: var(--qms-line-normal);
+}
+
+/* ==========================================================
+LIGHT MODE TABLE ENHANCEMENT
+========================================================== */
+
+html:not(.dark) table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+html:not(.dark) thead {
+  background:
+    linear-gradient(
+      180deg,
+      #f8fafc 0%,
+      #f3f6fa 100%
+    );
+}
+
+html:not(.dark) thead th {
+  color: #475569;
+
+  font-size: 0.72rem;
+  font-weight: 700;
+
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+
+  border-bottom: 1px solid #e2e8f0;
+}
+
+html:not(.dark) tbody {
+  background: #ffffff;
+}
+
+html:not(.dark) tbody tr {
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+html:not(.dark) tbody tr:hover {
+  background: #f8fbff;
+}
+
+html:not(.dark) tbody td {
+  border-color: #edf2f7;
+}
+
+html:not(.dark) table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* ==========================================================
+LINKS
+========================================================== */
+
+a {
+  text-decoration: none;
+
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+/* ==========================================================
+IMAGES / SVG
+========================================================== */
+
+img {
+  max-width: 100%;
+}
+
+svg {
+  flex-shrink: 0;
+}
+
+/* ==========================================================
+SELECTION
+========================================================== */
+
+::selection {
+  background: #dbeafe;
+  color: #111827;
+}
+
+html.dark ::selection {
+  background: #1e3a8a;
+  color: #f8fafc;
+}
+
+/* ==========================================================
+FOCUS
+========================================================== */
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+}
+
+/* ==========================================================
+SCROLLBAR
+========================================================== */
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+/* ==========================================================
+QMS COMPACT UTILITY CLASSES
+========================================================== */
+
+.qms-text-xs {
+  font-size: var(--qms-font-xs);
+}
+
+.qms-text-sm {
+  font-size: var(--qms-font-sm);
+}
+
+.qms-text-md {
+  font-size: var(--qms-font-md);
+}
+
+.qms-text-lg {
+  font-size: var(--qms-font-lg);
+}
+
+.qms-text-xl {
+  font-size: var(--qms-font-xl);
+}
+
+.qms-text-2xl {
+  font-size: var(--qms-font-2xl);
+}
+
+.qms-text-3xl {
+  font-size: var(--qms-font-3xl);
+}
+
+/* ==========================================================
+QMS CONTROL CLASSES
+========================================================== */
+
+.qms-control {
+  min-height: var(--qms-control-height-md);
+
+  padding:
+    var(--qms-control-padding-y) var(--qms-control-padding-x);
+
+  border: 1px solid var(--qms-border-color);
+
+  border-radius: var(--qms-radius-md);
+
+  font-size: var(--qms-font-sm);
+}
+
+.qms-control-sm {
+  min-height: var(--qms-control-height-sm);
+
+  padding: 5px 10px;
+
+  font-size: var(--qms-font-xs);
+}
+
+.qms-control-lg {
+  min-height: var(--qms-control-height-lg);
+
+  padding: 9px 14px;
+
+  font-size: var(--qms-font-md);
+}
+
+/* ==========================================================
+QMS CARD
+========================================================== */
+
+.qms-card {
+  border: 1px solid var(--qms-border);
+
+  border-radius: var(--qms-radius-lg);
+
+  background: var(--qms-surface);
+
+  box-shadow: var(--qms-shadow-sm);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+html:not(.dark) .qms-card:hover {
+  border-color: #d7e1ee;
+
+  box-shadow: var(--qms-shadow-md);
+}
+
+/* ==========================================================
+QMS BADGE
+========================================================== */
+
+.qms-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  min-height: 22px;
+
+  padding: 2px 8px;
+
+  border-radius: 999px;
+
+  font-size: var(--qms-font-xs);
+
+  font-weight: 500;
+
+  line-height: 1.2;
+
+  letter-spacing: 0.01em;
+}
+
+/* ==========================================================
+QMS PAGE CONTAINER
+========================================================== */
+
+.qms-page {
+  width: 100%;
+  padding: var(--qms-space-8);
+}
+
+.qms-page-header {
+  margin-bottom: var(--qms-space-6);
+}
+
+.qms-page-title {
+  font-size: var(--qms-font-2xl);
+
+  font-weight: 600;
+
+  line-height: var(--qms-line-tight);
+
+  color: var(--qms-text);
+}
+
+.qms-page-description {
+  margin-top: var(--qms-space-2);
+
+  font-size: var(--qms-font-sm);
+
+  color: var(--qms-text-secondary);
+}
+
+/* ==========================================================
+QMS TABLE
+========================================================== */
+
+.qms-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  font-size: var(--qms-font-sm);
+}
+
+.qms-table th {
+  padding: 9px 12px;
+
+  font-size: var(--qms-font-xs);
+
+  font-weight: 600;
+
+  text-align: left;
+
+  white-space: nowrap;
+}
+
+.qms-table td {
+  padding: 9px 12px;
+
+  font-size: var(--qms-font-sm);
+}
+
+/* ==========================================================
+QMS MODAL
+========================================================== */
+
+.qms-modal {
+  border-radius: var(--qms-radius-lg);
+
+  box-shadow: var(--qms-shadow-lg);
+}
+
+.qms-modal-header {
+  padding: 16px 20px;
+
+  border-bottom: 1px solid var(--qms-border-color);
+}
+
+.qms-modal-body {
+  padding: 20px;
+}
+
+.qms-modal-footer {
+  padding: 12px 20px;
+
+  border-top: 1px solid var(--qms-border-color);
+}
+
+/* ==========================================================
+QMS INTERACTIVE SURFACES
+========================================================== */
+
+.qms-interactive {
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+html:not(.dark) .qms-interactive:hover {
+  border-color: #d8e3f0;
+
+  background-color: #fbfdff;
+
+  box-shadow:
+    0 6px 18px rgb(15 23 42 / 0.055);
+}
+
+/* ==========================================================
+QMS PAGE SURFACE
+========================================================== */
+
+.qms-page-surface {
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 1px 2px rgb(15 23 42 / 0.025),
+    0 8px 24px rgb(15 23 42 / 0.035);
+}
+
+html.dark .qms-page-surface {
+  background: var(--qms-surface);
+  border-color: var(--qms-border);
+  box-shadow: none;
+}
+
+/* ==========================================================
+QMS KPI CARD
+========================================================== */
+
+.qms-kpi {
+  position: relative;
+
+  overflow: hidden;
+
+  border: 1px solid var(--qms-border);
+
+  border-radius: 12px;
+
+  background: var(--qms-surface);
+
+  box-shadow: var(--qms-shadow-sm);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+html:not(.dark) .qms-kpi:hover {
+  border-color: #d5e2f1;
+
+  box-shadow:
+    0 8px 22px rgb(15 23 42 / 0.065);
+
+  transform: translateY(-1px);
+}
+
+/* ==========================================================
+QMS DIVIDER
+========================================================== */
+
+.qms-divider {
+  height: 1px;
+  width: 100%;
+  background: var(--qms-border-soft);
+}
+
+/* ==========================================================
+QMS GLASS SURFACE
+========================================================== */
+
+.qms-glass {
+  background: rgb(255 255 255 / 0.78);
+
+  border: 1px solid rgb(226 232 240 / 0.85);
+
+  box-shadow:
+    0 8px 24px rgb(15 23 42 / 0.045);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+html.dark .qms-glass {
+  background: rgb(15 23 42 / 0.78);
+
+  border-color: rgb(51 65 85 / 0.85);
+
+  box-shadow: none;
+}
+
+/* ==========================================================
+GLOBAL CARD ENHANCEMENT
+========================================================== */
+
+html:not(.dark) .rounded-xl.border.bg-white,
+html:not(.dark) .rounded-lg.border.bg-white {
+  border-color: #e2e8f0;
+
+  box-shadow:
+    0 1px 2px rgb(15 23 42 / 0.025),
+    0 4px 12px rgb(15 23 42 / 0.035);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+html:not(.dark) .rounded-xl.border.bg-white:hover {
+  border-color: #d6e1ee;
+
+  box-shadow:
+    0 8px 22px rgb(15 23 42 / 0.06);
+}
+
+/* ==========================================================
+PRIMARY BUTTONS
+========================================================== */
+
+/*
+The application historically uses bg-black / bg-gray-900
+for primary actions. Keep those classes working while
+giving them the QMS primary blue appearance.
+*/
+
+button.bg-black,
+a.bg-black,
+button.bg-gray-900,
+a.bg-gray-900 {
+  background: var(--qms-primary) !important;
+  color: #ffffff !important;
+
+  border-color: var(--qms-primary) !important;
+}
+
+button.bg-black:hover,
+a.bg-black:hover,
+button.bg-gray-900:hover,
+a.bg-gray-900:hover {
+  background: var(--qms-primary-dark) !important;
+
+  border-color: var(--qms-primary-dark) !important;
+
+  color: #ffffff !important;
+
+  box-shadow:
+    0 4px 10px rgb(37 99 235 / 0.18);
+}
+
+button.bg-black svg,
+button.bg-gray-900 svg,
+a.bg-black svg,
+a.bg-gray-900 svg {
+  color: #ffffff !important;
+  stroke: currentColor !important;
+}
+
+/* ==========================================================
+STATUS COLORS
+========================================================== */
+
+.bg-green-50 {
+  background: var(--qms-success-soft) !important;
+}
+
+.text-green-700 {
+  color: var(--qms-success-dark) !important;
+}
+
+.bg-red-50 {
+  background: var(--qms-danger-soft) !important;
+}
+
+.text-red-700 {
+  color: var(--qms-danger-dark) !important;
+}
+
+.bg-yellow-50,
+.bg-amber-50 {
+  background: var(--qms-warning-soft) !important;
+}
+
+.text-yellow-700,
+.text-amber-700 {
+  color: var(--qms-warning-dark) !important;
+}
+
+.bg-blue-50 {
+  background: var(--qms-primary-soft) !important;
+}
+
+.text-blue-700 {
+  color: var(--qms-primary-dark) !important;
+}
+
+.bg-purple-50 {
+  background: var(--qms-purple-soft) !important;
+}
+
+.text-purple-700 {
+  color: var(--qms-purple-dark) !important;
+}
+
+.bg-indigo-50 {
+  background: var(--qms-indigo-soft) !important;
+}
+
+.text-indigo-700 {
+  color: var(--qms-indigo-dark) !important;
+}
+
+.bg-cyan-50 {
+  background: var(--qms-cyan-soft) !important;
+}
+
+.text-cyan-700 {
+  color: var(--qms-cyan-dark) !important;
+}
+
+.bg-orange-50 {
+  background: var(--qms-orange-soft) !important;
+}
+
+.text-orange-700 {
+  color: var(--qms-orange-dark) !important;
+}
+
+.bg-pink-50 {
+  background: var(--qms-pink-soft) !important;
+}
+
+.text-pink-700 {
+  color: var(--qms-pink-dark) !important;
+}
+
+.bg-teal-50 {
+  background: var(--qms-teal-soft) !important;
+}
+
+.text-teal-700 {
+  color: var(--qms-teal-dark) !important;
+}
+
+/* ==========================================================
+STATUS BADGE ICONS
+========================================================== */
+
+.bg-green-50 svg {
+  color: var(--qms-success) !important;
+  stroke: currentColor !important;
+}
+
+.bg-red-50 svg {
+  color: var(--qms-danger) !important;
+  stroke: currentColor !important;
+}
+
+.bg-yellow-50 svg,
+.bg-amber-50 svg {
+  color: var(--qms-warning) !important;
+  stroke: currentColor !important;
+}
+
+.bg-blue-50 svg {
+  color: var(--qms-primary) !important;
+  stroke: currentColor !important;
+}
+
+.bg-purple-50 svg {
+  color: var(--qms-purple) !important;
+  stroke: currentColor !important;
+}
+
+.bg-indigo-50 svg {
+  color: var(--qms-indigo) !important;
+  stroke: currentColor !important;
+}
+
+.bg-cyan-50 svg {
+  color: var(--qms-cyan) !important;
+  stroke: currentColor !important;
+}
+
+.bg-orange-50 svg {
+  color: var(--qms-orange) !important;
+  stroke: currentColor !important;
+}
+
+/* ==========================================================
+BADGES
+========================================================== */
+
+.rounded-full {
+  letter-spacing: 0.01em;
+}
+
+/* ==========================================================
+SVG GLOBAL BASE
+========================================================== */
+
+svg {
+  flex-shrink: 0;
+}
+
+svg[stroke="currentColor"] {
+  stroke: currentColor !important;
+}
+
+svg[fill="currentColor"] {
+  fill: currentColor !important;
+}
+
+/* ==========================================================
+SIDEBAR
+========================================================== */
+
+aside {
+  background: #ffffff;
+
+  border-color: var(--qms-border);
+}
+
+html.dark aside {
+  background: #0f172a;
+}
+
+/* ==========================================================
+SIDEBAR LINKS
+========================================================== */
+
+aside nav a {
+  position: relative;
+
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
+}
+
+/* ==========================================================
+SIDEBAR HOVER
+========================================================== */
+
+html:not(.dark) aside nav a:hover {
+  color: var(--qms-primary) !important;
+
+  background: var(--qms-primary-soft) !important;
+}
+
+/* ==========================================================
+SIDEBAR ACTIVE ITEM
+========================================================== */
+
+html:not(.dark) aside nav a.bg-black,
+html:not(.dark) aside nav a.bg-gray-900,
+html:not(.dark) aside nav a.bg-slate-900 {
+  background:
+    linear-gradient(
+      90deg,
+      #eff6ff 0%,
+      #f8fbff 100%
+    ) !important;
+
+  color: var(--qms-primary-dark) !important;
+
+  box-shadow:
+    inset 0 0 0 1px rgb(37 99 235 / 0.055);
+}
+
+/* ==========================================================
+SIDEBAR ACTIVE INDICATOR
+========================================================== */
+
+html:not(.dark) aside nav a.bg-black::before,
+html:not(.dark) aside nav a.bg-gray-900::before,
+html:not(.dark) aside nav a.bg-slate-900::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+
+  width: 3px;
+
+  border-radius: 0 4px 4px 0;
+
+  background: var(--qms-primary);
+}
+
+/* ==========================================================
+SIDEBAR ICON BASE
+========================================================== */
+
+aside nav a svg {
+  width: 20px;
+  height: 20px;
+
+  color: #64748b !important;
+
+  stroke: currentColor !important;
+
+  transition:
+    color 0.2s ease,
+    stroke 0.2s ease,
+    fill 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* ==========================================================
+SIDEBAR ICON HOVER
+========================================================== */
+
+html:not(.dark) aside nav a:hover svg {
+  color: var(--qms-primary) !important;
+
+  stroke: var(--qms-primary) !important;
+
+  transform: scale(1.08);
+}
+
+/* ==========================================================
+SIDEBAR ACTIVE ICON
+========================================================== */
+
+html:not(.dark) aside nav a.bg-black svg,
+html:not(.dark) aside nav a.bg-gray-900 svg,
+html:not(.dark) aside nav a.bg-slate-900 svg {
+  color: var(--qms-primary) !important;
+
+  stroke: var(--qms-primary) !important;
+
+  fill: none !important;
+}
+
+/* ==========================================================
+SIDEBAR INDIVIDUAL ICON COLORS
+========================================================== */
+
+aside nav a[href="/dashboard"] svg {
+  color: var(--qms-primary) !important;
+}
+
+aside nav a[href="/dashboard"]:hover svg {
+  color: var(--qms-primary-dark) !important;
+}
+
+aside nav a[href="/ncr"] svg {
+  color: var(--qms-danger) !important;
+}
+
+aside nav a[href="/ncr"]:hover svg {
+  color: var(--qms-danger-dark) !important;
+}
+
+aside nav a[href="/capa"] svg {
+  color: var(--qms-warning) !important;
+}
+
+aside nav a[href="/capa"]:hover svg {
+  color: var(--qms-warning-dark) !important;
+}
+
+aside nav a[href="/audits"] svg {
+  color: var(--qms-purple) !important;
+}
+
+aside nav a[href="/audits"]:hover svg {
+  color: var(--qms-purple-dark) !important;
+}
+
+aside nav a[href="/documents"] svg {
+  color: var(--qms-cyan) !important;
+}
+
+aside nav a[href="/documents"]:hover svg {
+  color: var(--qms-cyan-dark) !important;
+}
+
+aside nav a[href="/training"] svg {
+  color: var(--qms-indigo) !important;
+}
+
+aside nav a[href="/training"]:hover svg {
+  color: var(--qms-indigo-dark) !important;
+}
+
+aside nav a[href="/suppliers"] svg {
+  color: var(--qms-teal) !important;
+}
+
+aside nav a[href="/suppliers"]:hover svg {
+  color: var(--qms-teal-dark) !important;
+}
+
+aside nav a[href="/reports"] svg {
+  color: var(--qms-orange) !important;
+}
+
+aside nav a[href="/reports"]:hover svg {
+  color: var(--qms-orange-dark) !important;
+}
+
+/* ==========================================================
+ADMINISTRATION MENU
+========================================================== */
+
+aside nav .text-gray-400 {
+  color: #94a3b8 !important;
+}
+
+aside nav .text-gray-400::after {
+  content: "";
+
+  display: block;
+
+  margin-top: 6px;
+
+  width: 28px;
+  height: 2px;
+
+  border-radius: 999px;
+
+  background: var(--qms-primary);
+
+  opacity: 0.35;
+}
+
+/* ==========================================================
+ADMINISTRATION ICONS
+========================================================== */
+
+aside nav a[href^="/administration/"] svg {
+  color: var(--qms-indigo) !important;
+
+  stroke: currentColor !important;
+}
+
+aside nav a[href^="/administration/"]:hover svg {
+  color: var(--qms-indigo-dark) !important;
+}
+
+/* ==========================================================
+ADMINISTRATION ITEM COLORS
+========================================================== */
+
+aside nav a[href="/administration/organization"] svg {
+  color: var(--qms-primary) !important;
+}
+
+aside nav a[href="/administration/users"] svg {
+  color: var(--qms-success) !important;
+}
+
+aside nav a[href="/administration/roles"] svg {
+  color: var(--qms-purple) !important;
+}
+
+aside nav a[href="/administration/permissions"] svg {
+  color: var(--qms-warning) !important;
+}
+
+aside nav a[href="/administration/auditLogs"] svg {
+  color: var(--qms-danger) !important;
+}
+
+aside nav a[href="/administration/pageMetadata"] svg {
+  color: var(--qms-cyan) !important;
+}
+
+/* ==========================================================
+ACTIVE SIDEBAR ICON MUST REMAIN PRIMARY
+========================================================== */
+
+html:not(.dark) aside nav a.bg-black svg,
+html:not(.dark) aside nav a.bg-gray-900 svg,
+html:not(.dark) aside nav a.bg-slate-900 svg {
+  color: var(--qms-primary) !important;
+
+  stroke: var(--qms-primary) !important;
+}
+
+/* ==========================================================
+PROFILE / SETTINGS SECTIONS
+========================================================== */
+
+[data-profile-section] {
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+html:not(.dark) [data-profile-section]:hover {
+  border-color: #dbeafe;
+
+  box-shadow:
+    0 6px 20px rgb(37 99 235 / 0.05);
+}
+
+/* ==========================================================
+COMMON COLORFUL ICON CONTAINERS
+========================================================== */
+
+.icon-blue {
+  color: var(--qms-primary) !important;
+  background: var(--qms-primary-soft) !important;
+}
+
+.icon-green {
+  color: var(--qms-success) !important;
+  background: var(--qms-success-soft) !important;
+}
+
+.icon-purple {
+  color: var(--qms-purple) !important;
+  background: var(--qms-purple-soft) !important;
+}
+
+.icon-indigo {
+  color: var(--qms-indigo) !important;
+  background: var(--qms-indigo-soft) !important;
+}
+
+.icon-cyan {
+  color: var(--qms-cyan) !important;
+  background: var(--qms-cyan-soft) !important;
+}
+
+.icon-orange {
+  color: var(--qms-orange) !important;
+  background: var(--qms-orange-soft) !important;
+}
+
+.icon-red {
+  color: var(--qms-danger) !important;
+  background: var(--qms-danger-soft) !important;
+}
+
+.icon-amber {
+  color: var(--qms-warning) !important;
+  background: var(--qms-warning-soft) !important;
+}
+
+.icon-pink {
+  color: var(--qms-pink) !important;
+  background: var(--qms-pink-soft) !important;
+}
+
+.icon-teal {
+  color: var(--qms-teal) !important;
+  background: var(--qms-teal-soft) !important;
+}
+
+/* ==========================================================
+ICON CONTAINER SVG
+========================================================== */
+
+.icon-blue svg,
+.icon-green svg,
+.icon-purple svg,
+.icon-indigo svg,
+.icon-cyan svg,
+.icon-orange svg,
+.icon-red svg,
+.icon-amber svg,
+.icon-pink svg,
+.icon-teal svg {
+  color: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* ==========================================================
+BUTTON ICONS
+========================================================== */
+
+button svg,
+a svg {
+  stroke: currentColor;
+}
+
+/* ==========================================================
+ACTION BUTTON ICONS
+========================================================== */
+
+button:hover svg {
+  transform: scale(1.05);
+
+  transition:
+    transform 0.15s ease,
+    color 0.15s ease;
+}
+
+button[title*="Edit"] svg,
+button[aria-label*="Edit"] svg {
+  color: var(--qms-primary) !important;
+  stroke: currentColor !important;
+}
+
+button[title*="Delete"] svg,
+button[aria-label*="Delete"] svg {
+  color: var(--qms-danger) !important;
+  stroke: currentColor !important;
+}
+
+button[title*="View"] svg,
+button[aria-label*="View"] svg {
+  color: var(--qms-cyan) !important;
+  stroke: currentColor !important;
+}
+
+button[title*="Add"] svg,
+button[title*="Create"] svg,
+button[aria-label*="Add"] svg,
+button[aria-label*="Create"] svg {
+  color: var(--qms-success) !important;
+  stroke: currentColor !important;
+}
+
+/* ==========================================================
+MODALS
+========================================================== */
+
+.fixed.inset-0.z-50 {
+  backdrop-filter: blur(2px);
+}
+
+.fixed.inset-0.z-50 > div {
+  box-shadow:
+    0 20px 50px rgb(15 23 42 / 0.15);
+}
+
+.fixed.inset-0 svg {
+  transition:
+    color 0.2s ease,
+    stroke 0.2s ease;
+}
+
+/* ==========================================================
+ALERTS
+========================================================== */
+
+.bg-red-50.border-red-200 {
+  box-shadow:
+    0 1px 2px rgb(220 38 38 / 0.04);
+}
+
+.bg-green-50.border-green-200 {
+  box-shadow:
+    0 1px 2px rgb(22 163 74 / 0.04);
+}
+
+.bg-yellow-50.border-yellow-200 {
+  box-shadow:
+    0 1px 2px rgb(217 119 6 / 0.04);
+}
+
+/* ==========================================================
+LOADING
+========================================================== */
+
+.animate-spin {
+  border-color: #dbeafe !important;
+
+  border-top-color: var(--qms-primary) !important;
+}
+
+/* ==========================================================
+PAGINATION
+========================================================== */
+
+button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+button:not([disabled]):hover {
+  box-shadow:
+    0 2px 6px rgb(15 23 42 / 0.06);
+}
+
+/* ==========================================================
+EMPTY STATES
+========================================================== */
+
+html:not(.dark) .text-gray-400 {
+  color: #94a3b8;
+}
+
+html:not(.dark) .text-gray-500 {
+  color: var(--qms-muted, #6b7280);
+}
+
+/* ==========================================================
+MOBILE SIDEBAR
+========================================================== */
+
+@media (max-width: 1023px) {
+  aside {
+    box-shadow:
+      8px 0 30px rgb(15 23 42 / 0.10);
+  }
+}
+
+/* ==========================================================
+DARK MODE TABLE READABILITY
+========================================================== */
+
+html.dark table {
+  color: #e5e7eb;
+}
+
+html.dark thead {
+  background-color: #1e293b;
+}
+
+html.dark thead th {
+  color: #cbd5e1 !important;
+  border-color: #334155 !important;
+}
+
+html.dark tbody {
+  background-color: #111827;
+}
+
+html.dark tbody tr {
+  background-color: #111827;
+  border-color: #334155 !important;
+}
+
+html.dark tbody tr:hover {
+  background-color: #1e293b !important;
+}
+
+html.dark tbody td {
+  color: #e5e7eb !important;
+  border-color: #334155 !important;
+}
+
+/* Secondary table text */
+
+html.dark tbody td .text-gray-500,
+html.dark tbody td .text-gray-400,
+html.dark tbody td .text-slate-500,
+html.dark tbody td .text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+/* Primary table text */
+
+html.dark tbody td .text-gray-900,
+html.dark tbody td .text-gray-800,
+html.dark tbody td .text-slate-900,
+html.dark tbody td .text-slate-800 {
+  color: #f8fafc !important;
+}
+
+/* Table links */
+
+html.dark tbody td a {
+  color: #93c5fd;
+}
+
+html.dark tbody td a:hover {
+  color: #bfdbfe;
+}
+
+/* Table row separators */
+
+html.dark table tr {
+  border-color: #334155 !important;
+}
+
+/* Checkbox inside tables */
+
+html.dark table input[type="checkbox"] {
+  accent-color: #3b82f6;
+}
+
+/* ==========================================================
+DARK MODE TABLE UTILITY OVERRIDES
+========================================================== */
+
+html.dark table .bg-white {
+  background-color: #111827 !important;
+}
+
+html.dark table .bg-gray-50 {
+  background-color: #0f172a !important;
+}
+
+html.dark table .bg-gray-100 {
+  background-color: #1e293b !important;
+}
+
+html.dark table .hover\:bg-gray-50:hover {
+  background-color: #1e293b !important;
+}
+
+html.dark table .hover\:bg-gray-100:hover {
+  background-color: #334155 !important;
+}
+
+/* ==========================================================
+RESPONSIVE SCALE
+========================================================== */
+
+@media (min-width: 1024px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 640px) {
+  html {
+    font-size: 14px;
+  }
+
+  body {
+    font-size: 14px;
+  }
+
+  table {
+    font-size: var(--qms-font-xs);
+  }
+
+  th {
+    font-size: 10px;
+  }
+
+  td {
+    font-size: var(--qms-font-xs);
+  }
+
+  .qms-page {
+    padding: var(--qms-space-4);
+  }
+
+  .qms-page-title {
+    font-size: var(--qms-font-xl);
+  }
+}
+
+/* ==========================================================
+REDUCED MOTION
+========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+
+    transition-duration: 0.01ms !important;
+
+    animation-duration: 0.01ms !important;
+
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* ==========================================================
+QMS COLOR PALETTE
+========================================================== */
+
+:root {
+  --qms-success: #16a34a;
+  --qms-success-dark: #15803d;
+  --qms-success-soft: #f0fdf4;
+
+  --qms-warning: #d97706;
+  --qms-warning-dark: #b45309;
+  --qms-warning-soft: #fffbeb;
+
+  --qms-danger: #dc2626;
+  --qms-danger-dark: #b91c1c;
+  --qms-danger-soft: #fef2f2;
+
+  --qms-purple: #7c3aed;
+  --qms-purple-dark: #6d28d9;
+  --qms-purple-soft: #f5f3ff;
+
+  --qms-indigo: #4f46e5;
+  --qms-indigo-dark: #4338ca;
+  --qms-indigo-soft: #eef2ff;
+
+  --qms-cyan: #0891b2;
+  --qms-cyan-dark: #0e7490;
+  --qms-cyan-soft: #ecfeff;
+
+  --qms-orange: #ea580c;
+  --qms-orange-dark: #c2410c;
+  --qms-orange-soft: #fff7ed;
+
+  --qms-pink: #db2777;
+  --qms-pink-dark: #be185d;
+  --qms-pink-soft: #fdf2f8;
+
+  --qms-teal: #0d9488;
+  --qms-teal-dark: #0f766e;
+  --qms-teal-soft: #f0fdfa;
+
+  --qms-border: #e2e8f0;
+  --qms-border-light: #edf2f7;
+
+  --qms-text: #111827;
+  --qms-text-secondary: #374151;
+  --qms-muted: #6b7280;
+
+  --qms-radius: 12px;
+}
+
+/* ==========================================================
+LIGHT MODE GLOBAL SURFACE ENHANCEMENT
+========================================================== */
+
+/*
+The application page background is intentionally pure white.
+
+Secondary surfaces such as cards, table headers, filters and
+controls retain subtle slate backgrounds to preserve hierarchy.
+*/
+
+html:not(.dark) {
+  background: #ffffff;
+}
+
+html:not(.dark) body {
+  background: #ffffff;
+}
+
+/* ==========================================================
+LIGHT MODE COMMON SURFACES
+========================================================== */
+
+html:not(.dark) .bg-white {
+  background-color: #ffffff;
+}
+
+html:not(.dark) .bg-gray-50 {
+  background-color: #f8fafc;
+}
+
+html:not(.dark) .bg-slate-50 {
+  background-color: #f8fafc;
+}
+
+html:not(.dark) .bg-gray-100,
+html:not(.dark) .bg-slate-100 {
+  background-color: #f1f5f9;
+}
+
+/* ==========================================================
+LIGHT MODE BORDER REFINEMENT
+========================================================== */
+
+html:not(.dark) .border-gray-100,
+html:not(.dark) .border-gray-200,
+html:not(.dark) .border-slate-100,
+html:not(.dark) .border-slate-200 {
+  border-color: #e2e8f0;
+}
+
+/* ==========================================================
+LIGHT MODE TEXT HIERARCHY
+========================================================== */
+
+html:not(.dark) .text-gray-900,
+html:not(.dark) .text-gray-800,
+html:not(.dark) .text-slate-900,
+html:not(.dark) .text-slate-800 {
+  color: #0f172a;
+}
+
+html:not(.dark) .text-gray-700,
+html:not(.dark) .text-gray-600,
+html:not(.dark) .text-slate-700,
+html:not(.dark) .text-slate-600 {
+  color: #475569;
+}
+
+html:not(.dark) .text-gray-500,
+html:not(.dark) .text-gray-400,
+html:not(.dark) .text-slate-500,
+html:not(.dark) .text-slate-400 {
+  color: #64748b;
+}
+
+/* ==========================================================
+LIGHT MODE HOVER SURFACES
+========================================================== */
+
+html:not(.dark) .hover\:bg-gray-50:hover {
+  background-color: #f8fbff !important;
+}
+
+html:not(.dark) .hover\:bg-gray-100:hover {
+  background-color: #f1f5f9 !important;
+}
+
+html:not(.dark) .hover\:bg-slate-50:hover {
+  background-color: #f8fbff !important;
+}
+
+html:not(.dark) .hover\:bg-slate-100:hover {
+  background-color: #f1f5f9 !important;
+}
+
+/* ==========================================================
+LIGHT MODE COLORFUL STATUS CARDS
+========================================================== */
+
+html:not(.dark) .bg-blue-50,
+html:not(.dark) .bg-green-50,
+html:not(.dark) .bg-red-50,
+html:not(.dark) .bg-amber-50,
+html:not(.dark) .bg-yellow-50,
+html:not(.dark) .bg-purple-50,
+html:not(.dark) .bg-indigo-50,
+html:not(.dark) .bg-cyan-50,
+html:not(.dark) .bg-orange-50,
+html:not(.dark) .bg-pink-50,
+html:not(.dark) .bg-teal-50 {
+  border-color: rgb(226 232 240 / 0.75);
+}
+
+/* ==========================================================
+LIGHT MODE CARD DEPTH
+========================================================== */
+
+html:not(.dark) .rounded-xl.border,
+html:not(.dark) .rounded-lg.border {
+  border-color: #e2e8f0;
+}
+
+html:not(.dark) .rounded-xl.border.bg-white,
+html:not(.dark) .rounded-lg.border.bg-white {
+  box-shadow:
+    0 1px 2px rgb(15 23 42 / 0.025),
+    0 4px 14px rgb(15 23 42 / 0.035);
+}
+
+/* ==========================================================
+LIGHT MODE PRIMARY ACTIONS
+========================================================== */
+
+html:not(.dark) .bg-blue-600 {
+  box-shadow:
+    0 2px 5px rgb(37 99 235 / 0.12);
+}
+
+html:not(.dark) .bg-blue-600:hover {
+  box-shadow:
+    0 5px 12px rgb(37 99 235 / 0.18);
+}
+
+/* ==========================================================
+LIGHT MODE MODALS
+========================================================== */
+
+html:not(.dark) .fixed.inset-0.z-50 > div {
+  border: 1px solid rgb(226 232 240 / 0.9);
+
+  box-shadow:
+    0 24px 60px rgb(15 23 42 / 0.16),
+    0 8px 20px rgb(15 23 42 / 0.06);
+}
+
+/* ==========================================================
+LIGHT MODE TOP-LEVEL PANELS
+========================================================== */
+
+html:not(.dark) .bg-white.rounded-xl,
+html:not(.dark) .bg-white.rounded-lg {
+  border-color: #e2e8f0;
+}
+
+/* ==========================================================
+LIGHT MODE CHECKBOX / RADIO
+========================================================== */
+
+html:not(.dark) input[type="checkbox"],
+html:not(.dark) input[type="radio"] {
+  accent-color: var(--qms-primary);
+}
+
+/* ==========================================================
+LIGHT MODE PLACEHOLDERS
+========================================================== */
+
+html:not(.dark) input::placeholder,
+html:not(.dark) textarea::placeholder {
+  color: #94a3b8;
+}
+
+/* ==========================================================
+LIGHT MODE SCROLLBAR
+========================================================== */
+
+html:not(.dark) * {
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+/* ==========================================================
+SIDEBAR MOBILE
+========================================================== */
+
+@media (max-width: 1023px) {
+  aside {
+    box-shadow:
+      8px 0 30px rgb(15 23 42 / 0.10);
+  }
+}
+
+/* ==========================================================
+FINAL LIGHT MODE PAGE BACKGROUND
+========================================================== */
+
+html:not(.dark),
+html:not(.dark) body {
+  background: #ffffff !important;
+}
+
+html:not(.dark) body {
+  background-image: none !important;
+}
+
+html:not(.dark) #__next {
+  background: #ffffff !important;
+}
+/* =========================================================
+   QMS SIDEBAR LOGO
+   ========================================================= */
+
+.qms-sidebar-logo {
+  display: flex;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+
+  background: #0f172a;
+  color: #ffffff;
+
+  font-size: 0.875rem;
+  font-weight: 700;
+
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.08);
+}
+
+/* Dark mode: transparent with WHITE outline */
+html.dark .qms-sidebar-logo {
+  background: transparent !important;
+  border: 1px solid #ffffff !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
 }
