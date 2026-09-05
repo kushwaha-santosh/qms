@@ -319,7 +319,7 @@ export default function ResetPasswordPage() {
                             dark:!bg-transparent
                             dark:!text-white
                             dark:!shadow-none
-                            qms-sidebar-logo"
+                            shield-icon"
                       >
                         <LockIcon />
                       </div>
@@ -409,7 +409,7 @@ export default function ResetPasswordPage() {
                           dark:!bg-transparent
                           dark:!text-white
                           dark:!shadow-none
-                          qms-sidebar-logo"
+                         shield-icon"
                       >
                         <LockIcon />
                       </div>

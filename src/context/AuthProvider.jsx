@@ -188,7 +188,11 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const currentPath = window.location.pathname;
 
-    if (currentPath === "/login") {
+    if (
+      currentPath === "/login" ||
+      currentPath === "/forgot-password" ||
+      currentPath === "/reset-password"
+    ) {
       setUser(null);
       setPermissions([]);
       setLoading(false);
