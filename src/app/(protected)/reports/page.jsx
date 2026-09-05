@@ -697,7 +697,7 @@ HEADER
 ======================================================= */}
 
         <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-          <div className="border-b border-slate-100 bg-gradient-to-r from-blue-50/60 via-white to-indigo-50/50 px-5 py-4">
+          <div className="border-b border-slate-100  from-blue-50/60 via-white to-indigo-50/50 px-5 py-4">
             <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
               {/* TITLE */}
 
