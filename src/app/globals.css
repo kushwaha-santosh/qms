@@ -2151,3 +2151,11 @@ html.dark .qms-sidebar-logo {
   color: #ffffff !important;
   box-shadow: none !important;
 }
+
+ html.dark .shield-icon {
+  background: transparent !important;
+ 
+  color: #ffffff !important;
+  box-shadow: none !important;
+  font-size: 10px;
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthProvider";
@@ -9,7 +9,7 @@ import toastService from "@/services/toastService/toast.service";
 export default function LoginPage() {
   const router = useRouter();
 
-  const { login } = useAuth();
+  const { login, user } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,6 +20,14 @@ export default function LoginPage() {
   const [error, setError] = useState("");
 
   const currentYear = new Date().getFullYear();
+
+  useEffect(() => {
+    if (loading) return;
+
+    if (user) {
+      router.replace("/dashboard");
+    }
+  }, [user, loading, router]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -88,7 +96,29 @@ LEFT BRANDING PANEL
 
               <div>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-slate-950 shadow-lg">
+                  <div
+                    //  className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-slate-950 shadow-lg"
+                    className="
+    flex
+    h-9
+    w-9
+    shrink-0
+    items-center
+    justify-center
+    rounded-xl
+    bg-slate-900
+    text-sm
+    font-bold
+    text-white
+    shadow-sm
+
+    dark:!border
+    dark:!border-white
+    dark:!bg-transparent
+    dark:!text-white
+    dark:!shadow-none
+    qms-sidebar-logo"
+                  >
                     <svg
                       className="h-5 w-5"
                       viewBox="0 0 24 24"
@@ -178,7 +208,7 @@ LEFT BRANDING PANEL
                 FUTURE IMAGE PLACEHOLDER
             ================================================== */}
 
-                <div className="mt-5 flex h-20 items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/[0.03]">
+                {/* <div className="mt-5 flex h-20 items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/[0.03]">
                   <div className="text-center">
                     <div className="text-[9px] font-semibold uppercase tracking-[0.2em] text-slate-500">
                       QMS Illustration
@@ -188,7 +218,7 @@ LEFT BRANDING PANEL
                       Illustration can be added here later
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               {/* ==================================================
@@ -543,7 +573,16 @@ LEFT BRANDING PANEL
               {/* SECURITY NOTE */}
 
               <div className="mt-6 border-t border-gray-100 pt-5">
-                <div className="flex items-center justify-center gap-2 text-xs text-gray-400">
+                <div
+                  className="flex items-center justify-center gap-2 text-xs text-gray-400
+                 dark:!border
+                      dark:!border-white
+                      dark:!bg-transparent
+                      dark:!text-white
+                      dark:!shadow-none
+                      shield-icon
+                "
+                >
                   <svg
                     className="h-4 w-4"
                     viewBox="0 0 24 24"

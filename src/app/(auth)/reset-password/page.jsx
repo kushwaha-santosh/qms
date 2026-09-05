@@ -140,7 +140,17 @@ export default function ResetPasswordPage() {
 
             <div className="relative z-10 flex h-full w-full flex-col justify-between p-8 xl:p-10">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-slate-950 shadow-lg">
+                <div
+                  // className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-slate-950 shadow-lg"
+                  className="
+                  flex items-center justify-center gap-2 text-xs text-gray-400
+                  dark:!border
+                  dark:!border-white
+                  dark:!bg-transparent
+                  dark:!text-white
+                  dark:!shadow-none
+                  qms-sidebar-logo"
+                >
                   <ShieldIcon />
                 </div>
 
@@ -205,7 +215,17 @@ export default function ResetPasswordPage() {
               {/* MOBILE LOGO */}
 
               <div className="mb-8 flex items-center gap-3 lg:hidden">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-950 text-white">
+                <div
+                  // className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-950 text-white"
+                  className="
+                  flex items-center justify-center gap-2 text-xs text-gray-400
+                  dark:!border
+                  dark:!border-white
+                  dark:!bg-transparent
+                  dark:!text-white
+                  dark:!shadow-none
+                  qms-sidebar-logo"
+                >
                   <ShieldIcon />
                 </div>
 
@@ -286,7 +306,21 @@ export default function ResetPasswordPage() {
                     </label>
 
                     <div className="relative">
-                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
+                      <div
+                        // className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400"
+                        className="
+                          pointer-events-none 
+                          absolute 
+                          inset-y-0 left-0 
+                          flex items-center 
+                          pl-3.5 text-gray-400
+                            dark:!border
+                            dark:!border-white
+                            dark:!bg-transparent
+                            dark:!text-white
+                            dark:!shadow-none
+                            qms-sidebar-logo"
+                      >
                         <LockIcon />
                       </div>
 
@@ -360,7 +394,23 @@ export default function ResetPasswordPage() {
                     </label>
 
                     <div className="relative">
-                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
+                      <div
+                        // className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400"
+                        className="
+                        pointer-events-none
+                          absolute 
+                          inset-y-0 
+                          left-0 flex 
+                          items-center 
+                          pl-3.5 
+                          text-gray-400
+                          dark:!border
+                          dark:!border-white
+                          dark:!bg-transparent
+                          dark:!text-white
+                          dark:!shadow-none
+                          qms-sidebar-logo"
+                      >
                         <LockIcon />
                       </div>
 
@@ -446,7 +496,18 @@ export default function ResetPasswordPage() {
               {/* SECURITY NOTE */}
 
               <div className="mt-7 border-t border-gray-100 pt-5">
-                <div className="flex items-center justify-center gap-2 text-xs text-gray-400">
+                <div
+                  // className="flex items-center justify-center gap-2 text-xs text-gray-400"
+                  className="
+                      flex items-center justify-center gap-2 text-xs text-gray-400
+                      dark:!border
+                      dark:!border-white
+                      dark:!bg-transparent
+                      dark:!text-white
+                      dark:!shadow-none
+                      shield-icon
+                     "
+                >
                   <ShieldIcon />
                   Secure password recovery for your QMS environment
                 </div>
