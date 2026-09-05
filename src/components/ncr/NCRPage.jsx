@@ -1,5 +1,6 @@
 "use client";
 
+import { DataTablePagination } from "@/components/common/data-table";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
@@ -660,36 +661,12 @@ export default function NCRPage() {
         onDelete={askDelete}
       />
 
-      {/* PAGINATION */}
-
-      {!loading && (
-        <div className="flex justify-between rounded-2xl border bg-white px-4 py-3 text-xs">
-          <span>
-            Page {pagination.page || page} of {pagination.totalPages || 1} ·{" "}
-            {pagination.total || 0} total
-          </span>
-
-          <div className="flex gap-2">
-            <button
-              type="button"
-              disabled={page <= 1}
-              onClick={() => setPage(page - 1)}
-              className="rounded border px-3 py-1.5 disabled:opacity-40"
-            >
-              Previous
-            </button>
-
-            <button
-              type="button"
-              disabled={page >= (pagination.totalPages || 1)}
-              onClick={() => setPage(page + 1)}
-              className="rounded border px-3 py-1.5 disabled:opacity-40"
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      )}
+      <DataTablePagination
+        pagination={pagination}
+        loading={loading}
+        onPageChange={setPage}
+        entityLabel="NCR records"
+      />
 
       {/* MODALS */}
 

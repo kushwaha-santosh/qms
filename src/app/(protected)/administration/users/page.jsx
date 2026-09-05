@@ -1,5 +1,6 @@
 "use client";
 
+import { DataTablePagination } from "@/components/common/data-table";
 import { useCallback, useEffect, useState } from "react";
 
 import {
@@ -494,45 +495,19 @@ HEADER
           PAGINATION
       ================================================== */}
 
-          {!loading && pagination.total > 0 && (
-            <div className="flex flex-col gap-3 border-t border-gray-200 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="text-sm text-gray-500">
-                Showing page{" "}
-                <span className="font-medium text-gray-900">
-                  {pagination.page}
-                </span>{" "}
-                of{" "}
-                <span className="font-medium text-gray-900">
-                  {pagination.totalPages}
-                </span>{" "}
-                ·{" "}
-                <span className="font-medium text-gray-900">
-                  {pagination.total}
-                </span>{" "}
-                users
-              </div>
-
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={handlePrevious}
-                  disabled={pagination.page <= 1}
-                  className="rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  Previous
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleNext}
-                  disabled={pagination.page >= pagination.totalPages}
-                  className="rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          )}
+          <DataTablePagination
+            pagination={pagination}
+            loading={loading}
+            onPageChange={(nextPage) => {
+              if (nextPage < pagination.page) {
+                handlePrevious();
+              } else if (nextPage > pagination.page) {
+                handleNext();
+              }
+            }}
+            entityLabel="users"
+            className="rounded-none border-0 shadow-none"
+          />
         </div>
       </div>
       {/* ======================================================

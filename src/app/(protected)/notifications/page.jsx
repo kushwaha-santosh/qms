@@ -1,4 +1,5 @@
 "use client";
+import { DataTablePagination } from "@/components/common/data-table";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import {
@@ -321,29 +322,13 @@ export default function NotificationsPage() {
             })}
           </div>
         )}
-        <div className="flex items-center justify-between border-t border-slate-200 px-5 py-3 dark:border-slate-800">
-          <span className="text-xs text-slate-400">
-            Page {pagination.page} of {Math.max(pagination.totalPages, 1)}
-          </span>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              disabled={!pagination.hasPreviousPage}
-              onClick={() => load(page - 1)}
-              className="rounded-lg px-2 py-1 text-xs disabled:opacity-40"
-            >
-              Previous
-            </button>
-            <button
-              type="button"
-              disabled={!pagination.hasNextPage}
-              onClick={() => load(page + 1)}
-              className="rounded-lg px-2 py-1 text-xs disabled:opacity-40"
-            >
-              Next
-            </button>
-          </div>
-        </div>
+        <DataTablePagination
+          pagination={pagination}
+          loading={loading}
+          onPageChange={load}
+          entityLabel="notifications"
+          className="rounded-none border-0 shadow-none"
+        />
       </section>
     </div>
   );

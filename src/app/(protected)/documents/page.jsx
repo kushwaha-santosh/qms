@@ -1,5 +1,6 @@
 "use client";
 
+import { DataTablePagination } from "@/components/common/data-table";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/context/AuthProvider";
 import {
@@ -327,30 +328,12 @@ export default function DocumentsPage() {
           onHistory={(d) => setHistory({ open: true, document: d })}
         />
       )}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-white px-4 py-3 text-sm">
-        <span>{pagination.total || 0} document(s)</span>
-        <div className="flex gap-2">
-          <button
-            disabled={pagination.page <= 1 || loading}
-            onClick={() => load(pagination.page - 1)}
-            className="rounded-lg border px-3 py-1.5 disabled:opacity-40"
-          >
-            Previous
-          </button>
-          <span className="px-2 py-1.5">
-            Page {pagination.page || 1} of {pagination.totalPages || 1}
-          </span>
-          <button
-            disabled={
-              pagination.page >= (pagination.totalPages || 1) || loading
-            }
-            onClick={() => load(pagination.page + 1)}
-            className="rounded-lg border px-3 py-1.5 disabled:opacity-40"
-          >
-            Next
-          </button>
-        </div>
-      </div>
+      <DataTablePagination
+        pagination={pagination}
+        loading={loading}
+        onPageChange={load}
+        entityLabel="documents"
+      />
       <DocumentFormModal
         open={form.open}
         document={form.document}

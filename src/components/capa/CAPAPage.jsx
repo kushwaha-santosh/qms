@@ -1,5 +1,6 @@
 "use client";
 
+import { DataTablePagination } from "@/components/common/data-table";
 import { useCallback, useEffect, useState } from "react";
 import {
   getCAPAs,
@@ -316,32 +317,14 @@ export default function CAPAPage() {
         />
       )}
 
-      <div className="flex items-center justify-between">
-        <div className="text-sm text-slate-500">
-          Total: {pagination.total || 0}
-        </div>
-        <div className="flex gap-2">
-          <button
-            type="button"
-            disabled={pagination.page <= 1}
-            onClick={() => setPagination((c) => ({ ...c, page: c.page - 1 }))}
-            className="rounded-lg border px-3 py-2 text-sm disabled:opacity-40"
-          >
-            Previous
-          </button>
-          <span className="px-2 py-2 text-sm">
-            {pagination.page} / {pagination.totalPages}
-          </span>
-          <button
-            type="button"
-            disabled={pagination.page >= pagination.totalPages}
-            onClick={() => setPagination((c) => ({ ...c, page: c.page + 1 }))}
-            className="rounded-lg border px-3 py-2 text-sm disabled:opacity-40"
-          >
-            Next
-          </button>
-        </div>
-      </div>
+      <DataTablePagination
+        pagination={pagination}
+        loading={loading}
+        onPageChange={(nextPage) =>
+          setPagination((current) => ({ ...current, page: nextPage }))
+        }
+        entityLabel="CAPAs"
+      />
 
       <CAPAFormModal
         open={formOpen}

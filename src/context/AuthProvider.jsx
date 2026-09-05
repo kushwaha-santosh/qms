@@ -21,6 +21,26 @@ const normalizePermission = (permission) =>
     .trim()
     .toUpperCase();
 
+/*
+ * ==========================================================
+ * CURRENT USER REQUEST DEDUPLICATION
+ * ==========================================================
+ *
+ * React Strict Mode can execute the initial effect twice
+ * during development.
+ *
+ * Without this guard:
+ *
+ *   mount #1 -> /auth/me
+ *   mount #2 -> /auth/me
+ *
+ * Both requests are identical and unnecessary.
+ *
+ * Keep the currently running request at module level so it
+ * survives the Strict Mode effect cleanup/remount cycle.
+ */
+let currentUserRequestPromise = null;
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [permissions, setPermissions] = useState([]);
@@ -75,36 +95,79 @@ export function AuthProvider({ children }) {
   // LOAD CURRENT USER
   // ==========================================================
 
-  const loadUser = useCallback(async () => {
-    try {
-      setLoading(true);
+  const loadUser = useCallback(async (options = {}) => {
+    const { force = false } = options;
 
-      const response = await getCurrentUserRequest();
+    /*
+     * If a request is already running, reuse it.
+     *
+     * This is the important Strict Mode protection.
+     *
+     * `force` does NOT create a second concurrent request.
+     * It simply means that an already completed request should
+     * not be treated as a cached result.
+     */
+    if (!force && currentUserRequestPromise) {
+      return currentUserRequestPromise;
+    }
 
-      if (response?.success && response?.data?.user) {
-        const authenticatedUser = response.data.user;
+    if (currentUserRequestPromise) {
+      return currentUserRequestPromise;
+    }
 
-        setUser(authenticatedUser);
+    const request = (async () => {
+      try {
+        setLoading(true);
 
-        setPermissions(
-          response.data.permissions || authenticatedUser.permissions || [],
-        );
-      } else {
+        const response = await getCurrentUserRequest();
+
+        if (response?.success && response?.data?.user) {
+          const authenticatedUser = response.data.user;
+
+          setUser(authenticatedUser);
+
+          setPermissions(
+            response.data.permissions || authenticatedUser.permissions || [],
+          );
+
+          return authenticatedUser;
+        }
+
         setUser(null);
         setPermissions([]);
-      }
-    } catch (error) {
-      setUser(null);
-      setPermissions([]);
 
-      // 401 simply means there is no active session.
-      // Do not treat it as an application error.
-      if (error?.response?.status !== 401) {
-        console.error("Unable to load authenticated user:", error);
+        return null;
+      } catch (error) {
+        setUser(null);
+        setPermissions([]);
+
+        // 401 simply means there is no active session.
+        // Do not treat it as an application error.
+        if (error?.response?.status !== 401) {
+          console.error("Unable to load authenticated user:", error);
+        }
+
+        return null;
+      } finally {
+        setLoading(false);
+        setInitialized(true);
       }
+    })();
+
+    currentUserRequestPromise = request;
+
+    try {
+      return await request;
     } finally {
-      setLoading(false);
-      setInitialized(true);
+      /*
+       * Only clear the promise if it is still the same request.
+       *
+       * This protects against a future request being assigned
+       * before an older request finishes.
+       */
+      if (currentUserRequestPromise === request) {
+        currentUserRequestPromise = null;
+      }
     }
   }, []);
 
@@ -112,7 +175,6 @@ export function AuthProvider({ children }) {
   // INITIAL SESSION CHECK
   // ==========================================================
   //
-  // IMPORTANT:
   // The application uses cookie-based authentication
   // (`withCredentials: true`).
   //
@@ -120,10 +182,6 @@ export function AuthProvider({ children }) {
   //
   // When the user is already on /login, there is no reason
   // to call /auth/me during the initial AuthProvider mount.
-  //
-  // After successful login, login() explicitly calls
-  // loadUser(), so the authenticated user and permissions
-  // are still loaded correctly.
   //
   // ==========================================================
 
@@ -139,6 +197,13 @@ export function AuthProvider({ children }) {
       return;
     }
 
+    /*
+     * Do not use a component-level `useRef` here.
+     *
+     * React Strict Mode can recreate the component instance.
+     * The module-level request promise inside loadUser()
+     * handles the duplicate request instead.
+     */
     loadUser();
   }, [loadUser]);
 
@@ -163,21 +228,17 @@ export function AuthProvider({ children }) {
         }
 
         /*
-         * Do NOT rely only on the user returned
-         * from login.
+         * The login response may not contain the complete
+         * RBAC permission list.
          *
-         * The login response may not contain
-         * the complete RBAC permission list.
+         * Fetch /auth/me after login so the authenticated
+         * user and permissions are synchronized.
          *
-         * Fetch /auth/me immediately so user
-         * and permissions are synchronized.
-         *
-         * The login request has already established
-         * the authentication cookie, so /auth/me
-         * can now authenticate successfully.
+         * `force: true` means this is an intentional refresh.
+         * If another /auth/me request is already running,
+         * loadUser() still reuses that request.
          */
-
-        await loadUser();
+        await loadUser({ force: true });
 
         return response.data.user;
       } finally {
@@ -194,11 +255,7 @@ export function AuthProvider({ children }) {
   const logout = useCallback(async () => {
     /*
      * Clear the frontend authentication state first.
-     *
-     * This immediately removes the authenticated user
-     * and permissions from the application.
      */
-
     setUser(null);
     setPermissions([]);
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { DataTablePagination } from "@/components/common/data-table";
+import AuditLogTable from "@/components/auditLogs/AuditLogTable";
 import {
   useCallback,
   useEffect,
@@ -606,207 +608,18 @@ export default function AuditsPage() {
           TABLE
       ================================================== */}
 
-      <div className="overflow-hidden rounded-lg border bg-white shadow-sm">
+      <AuditLogTable
+        auditLogs={auditLogs}
+        loading={loading}
+        onViewDetails={handleViewDetails}
+      />
 
-        <div className="overflow-x-auto">
-
-          <table className="min-w-full divide-y">
-
-            <thead className="bg-gray-50">
-              <tr>
-
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">
-                  Date
-                </th>
-
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">
-                  User
-                </th>
-
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">
-                  Module
-                </th>
-
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">
-                  Action
-                </th>
-
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">
-                  Description
-                </th>
-
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">
-                  Organization
-                </th>
-
-                <th className="px-4 py-3 text-right text-xs font-semibold uppercase text-gray-500">
-                  Details
-                </th>
-
-              </tr>
-            </thead>
-
-            <tbody className="divide-y bg-white">
-
-              {loading ? (
-                <tr>
-                  <td
-                    colSpan="7"
-                    className="px-4 py-10 text-center text-sm text-gray-500"
-                  >
-                    Loading audit logs...
-                  </td>
-                </tr>
-              ) : auditLogs.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan="7"
-                    className="px-4 py-10 text-center text-sm text-gray-500"
-                  >
-                    No audit logs found.
-                  </td>
-                </tr>
-              ) : (
-                auditLogs.map(
-                  (log) => (
-                    <tr
-                      key={log._id}
-                      className="hover:bg-gray-50"
-                    >
-
-                      {/* DATE */}
-
-                      <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-600">
-                        {formatDate(
-                          log.createdAt
-                        )}
-                      </td>
-
-                      {/* USER */}
-
-                      <td className="px-4 py-3">
-                        <div className="text-sm font-medium text-gray-900">
-                          {log.userName ||
-                            "System"}
-                        </div>
-
-                        {log.userEmail && (
-                          <div className="text-xs text-gray-500">
-                            {log.userEmail}
-                          </div>
-                        )}
-                      </td>
-
-                      {/* MODULE */}
-
-                      <td className="whitespace-nowrap px-4 py-3">
-                        <span className="rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">
-                          {log.module}
-                        </span>
-                      </td>
-
-                      {/* ACTION */}
-
-                      <td className="whitespace-nowrap px-4 py-3">
-                        <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700">
-                          {log.action}
-                        </span>
-                      </td>
-
-                      {/* DESCRIPTION */}
-
-                      <td className="max-w-md px-4 py-3 text-sm text-gray-700">
-                        {log.description}
-                      </td>
-
-                      {/* ORGANIZATION */}
-
-                      <td className="px-4 py-3 text-sm text-gray-600">
-                        {log.organizationId?.name ||
-                          "Global"}
-                      </td>
-
-                      {/* DETAILS */}
-
-                      <td className="px-4 py-3 text-right">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            handleViewDetails(
-                              log
-                            )
-                          }
-                          className="rounded-md border px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
-                        >
-                          View
-                        </button>
-                      </td>
-
-                    </tr>
-                  )
-                )
-              )}
-
-            </tbody>
-
-          </table>
-
-        </div>
-
-        {/* ==================================================
-            PAGINATION
-        ================================================== */}
-
-        <div className="flex items-center justify-between border-t px-4 py-3">
-
-          <div className="text-sm text-gray-500">
-            Total: {pagination.total}
-          </div>
-
-          <div className="flex items-center gap-2">
-
-            <button
-              type="button"
-              disabled={
-                loading ||
-                pagination.page <= 1
-              }
-              onClick={() =>
-                handlePageChange(
-                  pagination.page - 1
-                )
-              }
-              className="rounded-md border px-3 py-1.5 text-sm disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              Previous
-            </button>
-
-            <span className="text-sm text-gray-600">
-              Page {pagination.page} of{" "}
-              {pagination.totalPages}
-            </span>
-
-            <button
-              type="button"
-              disabled={
-                loading ||
-                pagination.page >=
-                  pagination.totalPages
-              }
-              onClick={() =>
-                handlePageChange(
-                  pagination.page + 1
-                )
-              }
-              className="rounded-md border px-3 py-1.5 text-sm disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              Next
-            </button>
-
-          </div>
-
-        </div>
-      </div>
+      <DataTablePagination
+        pagination={pagination}
+        loading={loading}
+        onPageChange={handlePageChange}
+        entityLabel="audit logs"
+      />
 
       {/* ==================================================
           DETAILS MODAL

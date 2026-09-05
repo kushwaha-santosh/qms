@@ -20,6 +20,47 @@ const DEFAULT_METADATA = {
 };
 
 // ==========================================================
+// PAGE METADATA REQUEST DEDUPLICATION
+// ==========================================================
+//
+// Keyed by pathname.
+//
+// Example:
+//
+// /dashboard -> one in-flight request
+// /capa      -> separate request
+//
+// If React Strict Mode causes the same pathname effect to run
+// twice, both effects reuse the same Promise.
+//
+// ==========================================================
+
+const metadataRequestPromises = new Map();
+
+const getMetadataRequest = (pathname) => {
+  if (metadataRequestPromises.has(pathname)) {
+    return metadataRequestPromises.get(pathname);
+  }
+
+  const request = getEffectivePageMetadata(pathname);
+
+  metadataRequestPromises.set(pathname, request);
+
+  /*
+   * Remove the entry when the request completes.
+   *
+   * This prevents the Map from becoming a permanent cache.
+   */
+  request.finally(() => {
+    if (metadataRequestPromises.get(pathname) === request) {
+      metadataRequestPromises.delete(pathname);
+    }
+  });
+
+  return request;
+};
+
+// ==========================================================
 // PAGE METADATA MANAGER
 // ==========================================================
 
@@ -79,7 +120,7 @@ export default function PageMetadataManager() {
       // ======================================================
 
       try {
-        const response = await getEffectivePageMetadata(pathname);
+        const response = await getMetadataRequest(pathname);
 
         if (cancelled) {
           return;
@@ -96,17 +137,17 @@ export default function PageMetadataManager() {
           return;
         }
 
-        // ======================================================
+        // ====================================================
         // TITLE
-        // ======================================================
+        // ====================================================
 
         if (typeof metadata.title === "string" && metadata.title.trim()) {
           document.title = metadata.title.trim();
         }
 
-        // ======================================================
+        // ====================================================
         // DESCRIPTION
-        // ======================================================
+        // ====================================================
 
         if (
           typeof metadata.description === "string" &&
@@ -118,21 +159,24 @@ export default function PageMetadataManager() {
           );
         }
 
-        // ======================================================
+        // ====================================================
         // KEYWORDS
-        // ======================================================
+        // ====================================================
 
         if (typeof metadata.keywords === "string" && metadata.keywords.trim()) {
           keywordsElement.setAttribute("content", metadata.keywords.trim());
         }
       } catch (error) {
-        // ======================================================
-        // API ERROR
-        // ======================================================
-        // Defaults are already applied, so the application
-        // still has valid metadata.
-
-        console.error(`Unable to load page metadata for "${pathname}":`, error);
+        /*
+         * Defaults are already applied, so the application
+         * still has valid metadata.
+         */
+        if (!cancelled) {
+          console.error(
+            `Unable to load page metadata for "${pathname}":`,
+            error,
+          );
+        }
       }
     };
 

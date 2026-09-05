@@ -1,4 +1,5 @@
 "use client";
+import { DataTablePagination } from "@/components/common/data-table";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/context/AuthProvider";
 import QMSReferenceSelect from "@/components/qms/QMSReferenceSelect";
@@ -253,30 +254,12 @@ export default function TrainingsPage() {
           onHistory={(r) => setModal({ type: "history", record: r })}
         />
       )}
-      <div className="flex justify-between rounded-xl border bg-white px-4 py-3 text-sm">
-        <span>{pagination.total || 0} record(s)</span>
-        <div className="flex gap-2">
-          <button
-            disabled={pagination.page <= 1 || loading}
-            onClick={() => load(pagination.page - 1)}
-            className="rounded-lg border px-3 py-1.5 disabled:opacity-40"
-          >
-            Previous
-          </button>
-          <span>
-            Page {pagination.page || 1} of {pagination.totalPages || 1}
-          </span>
-          <button
-            disabled={
-              pagination.page >= (pagination.totalPages || 1) || loading
-            }
-            onClick={() => load(pagination.page + 1)}
-            className="rounded-lg border px-3 py-1.5 disabled:opacity-40"
-          >
-            Next
-          </button>
-        </div>
-      </div>
+      <DataTablePagination
+        pagination={pagination}
+        loading={loading}
+        onPageChange={load}
+        entityLabel="records"
+      />
       <TrainingFormModal
         open={modal.type === "form"}
         training={modal.record}

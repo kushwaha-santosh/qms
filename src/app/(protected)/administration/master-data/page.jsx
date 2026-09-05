@@ -1,5 +1,6 @@
 "use client";
 
+import { DataTablePagination } from "@/components/common/data-table";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useAuth } from "@/context/AuthProvider";
@@ -761,71 +762,22 @@ export default function MasterDataPage() {
 
       {/* PAGINATION */}
 
-      <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          {/* LEFT */}
-
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="text-xs text-slate-500">
-              Total{" "}
-              <span className="font-medium text-slate-700">
-                {pagination.total}
-              </span>{" "}
-              record(s)
-            </div>
-
-            <label className="flex items-center gap-2 text-xs text-slate-500">
-              <span>Rows per page</span>
-
-              <select
-                value={limit}
-                onChange={handleLimitChange}
-                disabled={loading}
-                className="rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs text-slate-700 outline-none focus:border-slate-500 disabled:bg-slate-50"
-              >
-                {PAGE_SIZE_OPTIONS.map((size) => (
-                  <option key={size} value={size}>
-                    {size}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          {/* RIGHT */}
-
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={goToPreviousPage}
-              disabled={loading || !pagination.hasPreviousPage}
-              className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              ← Previous
-            </button>
-
-            <div className="min-w-[90px] text-center text-xs text-slate-500">
-              Page{" "}
-              <span className="font-medium text-slate-700">
-                {pagination.totalPages ? pagination.page : 0}
-              </span>{" "}
-              /{" "}
-              <span className="font-medium text-slate-700">
-                {pagination.totalPages || 0}
-              </span>
-            </div>
-
-            <button
-              type="button"
-              onClick={goToNextPage}
-              disabled={loading || !pagination.hasNextPage}
-              className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              Next →
-            </button>
-          </div>
-        </div>
-      </div>
+      <DataTablePagination
+        pagination={pagination}
+        loading={loading}
+        onPageChange={(nextPage) => {
+          if (nextPage < pagination.page) {
+            goToPreviousPage();
+          } else if (nextPage > pagination.page) {
+            goToNextPage();
+          }
+        }}
+        onPageSizeChange={(nextLimit) => {
+          handleLimitChange({ target: { value: String(nextLimit) } });
+        }}
+        showPageSize
+        entityLabel="record(s)"
+      />
 
       {/* FORM MODAL */}
 
